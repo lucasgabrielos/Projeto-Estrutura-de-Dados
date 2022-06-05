@@ -5,8 +5,7 @@ import java.util.Scanner;
 public class ProjetoED {
 
     public static void main(String[] args) {
-        String word;
-        String[][] dic = {{"Professor", "Teacher"}, {"Dentista", "Dentist"}, {"Açougueiro", "Butcher"}, {"Advogado", "Lawyer"}, {"Cantor", "Singer"}};
+        String[][] dic = {{"Professor", "Teacher"}, {"Dentista", "Dentist"}, {"Acogueiro", "Butcher"}, {"Advogado", "Lawyer"}, {"Cantor", "Singer"}};
         String[][] dicIngl = cloneInverso(dic);
         Scanner scan = new Scanner(System.in);
         System.out.print("Digite 1 para visualizar o dicionario em português ou 2 para visualizar o dicionario em inglês: ");
@@ -15,14 +14,17 @@ public class ProjetoED {
             System.out.println("Por favor, digite uma opção correta: ");
             result = scan.nextInt();
         }
+        scan.nextLine();
+        System.out.printf("Digite uma palavra para saber a sua tradução: ");
+        String word = scan.nextLine();
         if (result == 1) {
             ordernar(dic);
             printar(dic);
-            busca(dic);
-
+            busca(dic, word);
         } else {
             ordernar(dicIngl);
             printar(dicIngl);
+            busca(dicIngl ,word);
         }
 
     }
@@ -64,41 +66,24 @@ public class ProjetoED {
         return clone;
     }
 
-    public static void busca(String[][] dic) {
-        String aux[] = {" ", " "};
+    public static void busca(String[][] dic, String word) {
         boolean achou = false;
         int inicio = 0;
         int meio = 0;
         int fim = dic.length - 1;
-        System.out.print("Digite uma palavra para saber a sua tradução: ");
-        Scanner scan = new Scanner(System.in);
-        String word = scan.nextLine();
-        for (int i = 0; i < dic.length - 1; i++) {
-            for (int c = i + 1; c < dic.length; c++) {
-                if (dic[i][0].compareTo(dic[c][0]) > 0) {
-                    aux[0] = dic[i][0];
-                    aux[1] = dic[i][1];
-                    dic[i][0] = dic[c][0];
-                    dic[i][1] = dic[c][1];
-                    dic[c][0] = aux[0];
-                    dic[c][1] = aux[1];
-                }
-            }
-        }
         while (inicio <= fim) {
             meio = (int) ((inicio + fim) / 2);
-            if (aux[meio].equalsIgnoreCase(word)) {
+            if (dic[meio][0].equalsIgnoreCase(word)) {
                 achou = true;
-                //System.out.println(aux[meio]+" Tradução: "+aux[meio+1]);
                 break;
-            } else if (aux[meio].compareTo(word) > 0) {
+            } else if (dic[meio][0].toLowerCase().compareTo(word.toLowerCase()) < 0) {
                 inicio = meio + 1;
             } else {
                 fim = meio - 1;
             }
         }
         if (achou == true) {
-            System.out.println(word + " Tradução: " + aux[meio + 1]);
+           System.out.println(dic[meio][0]+" Tradução: "+dic[meio][1]);
         } else {
             System.out.println("Palavra fora do dicionario...");
         }
